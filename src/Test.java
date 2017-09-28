@@ -15,6 +15,7 @@ import com.gargoylesoftware.htmlunit.html.DomElement;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlImage;
@@ -39,7 +40,7 @@ public class Test {
 	public static void getByName(HtmlPage current){
 		
 		HtmlElement element = (HtmlElement) current.getDocumentElement().getLastChild();
-		doSomething(element);
+		doSomething(element,new StringBuffer("Accessing the resquest paramters from a custom .tag file"));
 		/*DomNodeList<HtmlElement> list = element.getElementsByTagName(s);
 		 for(HtmlElement read : list){
 			 if(read.asText().contains("Điều trị các bệnh dị ứng")){
@@ -71,10 +72,10 @@ public class Test {
 		
 		
 	}
-	public static void doSomething(Node node) {
+	public static void doSomething(Node node, StringBuffer keyword) {
 	    // do something with the current node instead of System.out
 		
-		if(node.getTextContent().contains(new StringBuffer("Accessing the resquest paramters from a custom .tag file"))){
+		if(node.getTextContent().contentEquals(keyword)){
 			/*System.out.println(node.getTextContent());
 			System.out.println(node.getNodeName());
 			System.out.println(node.toString());
@@ -89,7 +90,7 @@ public class Test {
 	        Node currentNode = nodeList.item(i);
 	        if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
 	            //calls this method for all the children which is Element
-	            doSomething(currentNode);
+	            doSomething(currentNode,keyword);
 	        }
 	    }
 	}
@@ -135,14 +136,30 @@ public class Test {
 
 			    System.out.println(page.asText());*/
 			 
-			 	HtmlPage page = (HtmlPage) webClient.getPage("https://accounts.google.com/ServiceLogin/identifier?service=mail&passive=true&rm=false&continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&ss=1&scc=1&ltmpl=default&ltmplcache=2&emr=1&osid=1&flowName=GlifWebSignIn&flowEntry=AddSession"); 
+			 	HtmlPage page = (HtmlPage) webClient.getPage("https://www.google.com.vn/?gws_rd=ssl"); 
 			    List<HtmlForm> listform = page.getForms();
 			    HtmlForm form = listform.get(0);
-			    form.getInputByName("identifier").type("dinhhuy0610@gmail.com"); 
+			    /*form.getInputByName("identifier").type("dinhhuy0610@gmail.com");*/ 
 			   /* form.getInputByName("password").type("myPassword"); */
-
-			    page = form.getElementsByAttribute(arg0, null, null)
-
+			    form.getInputByName("q").type("abc");
+			    
+			    page = form.getInputByValue("Tìm với Google").click();
+			    /*doSomething(page.getDocumentElement().getLastChild(), new StringBuffer("Next"));
+			    System.out.println(page.getDocumentElement().asText());
+			    Node newNode = nodeList.get(0);
+			    System.out.println(newNode.getTextContent());
+			    for(int i = 1 ; i < nodeList.size() ; i++){
+			    	System.out.println(nodeList.get(i));
+			    	newNode.appendChild(nodeList.get(i));
+			    	
+			    }
+			    HtmlDivision nodeEle = (HtmlDivision) newNode;
+		    	
+		    	try {
+		    		page = nodeEle.click();
+				} catch (Exception e) {
+					// TODO: handle exception
+				}*/
 			    System.out.println(page.asText());
 			  } catch (FailingHttpStatusCodeException | IOException e) {
 				// TODO Auto-generated catch block
